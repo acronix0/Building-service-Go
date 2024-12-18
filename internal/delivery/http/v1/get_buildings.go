@@ -18,7 +18,7 @@ import (
 // @Param city query string false "Filter by city"
 // @Param year query int false "Filter by year"
 // @Param floors query int false "Filter by number of floors"
-// @Success 200 {array} domain.Building "List of buildings"
+// @Success 200 {array} dto.BuildingDTO "List of buildings"
 // @Failure 400 {object} Response "Invalid query parameters"
 // @Failure 500 {object} Response "Internal server error"
 // @Router /building [get]

@@ -13,7 +13,7 @@ func (s *BuildingService) Get(ctx context.Context, filters dto.FiltersBuildingDT
 		return []dto.BuildingDTO{}, err
 	}
 
-	result := make([]dto.BuildingDTO, len(buildings))
+	result := make([]dto.BuildingDTO, 0, len(buildings))
 	for _, building := range buildings {
 		result = append(result, mapper.MapModelToDTO(building))
 	}

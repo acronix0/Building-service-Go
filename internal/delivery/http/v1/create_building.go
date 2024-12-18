@@ -15,7 +15,7 @@ import (
 // @Description Add a new building to the database.
 // @Accept json
 // @Produce json
-// @Param input body dto.BuildingDTO true "Building details"
+// @Param input body dto.CreateBuildingDTO true "Building details"
 // @Success 201 {object} dto.BuildingDTO "Successfully created building"
 // @Failure 400 {object} Response "Invalid input data"
 // @Failure 500 {object} Response "Failed to add building"
@@ -26,7 +26,7 @@ func (h *Handler) createBuilding(c *gin.Context) {
 		slog.String("op", op),
 	)
 
-	var buildingDTO dto.BuildingDTO
+	var buildingDTO dto.CreateBuildingDTO
 	if err := c.ShouldBindJSON(&buildingDTO); err != nil {
 		newResponse(c, http.StatusBadRequest, "Invalid input data")
 		logger.Error("Invalid input data", slog.String("error", err.Error()))

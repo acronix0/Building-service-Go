@@ -7,8 +7,8 @@ import (
 	"github.com/acronix0/Building-service-Go/internal/mapper"
 )
 
-func (s *BuildingService) Create(ctx context.Context, building dto.BuildingDTO) error {
-	err := s.repository.Create(ctx, mapper.MapDTOToModel(building))
+func (s *BuildingService) Create(ctx context.Context, building dto.CreateBuildingDTO) error {
+	err := s.repository.Create(ctx, mapper.MapCreateDTOToModel(building))
 	if err != nil {
 		return err
 	}

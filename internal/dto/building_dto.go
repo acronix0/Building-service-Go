@@ -14,3 +14,10 @@ type FiltersBuildingDTO struct{
 	Year   *int    `json:"year"`
 	Floors *int    `json:"floors"`
 }
+
+type CreateBuildingDTO struct {
+	Name   string `json:"name"`
+	City   string `json:"city"`
+	Year   int    `json:"year"`
+	Floors int    `json:"floors"`
+}

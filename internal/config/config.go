@@ -15,9 +15,9 @@ const (
 )
 
 type Config struct {
-	AppEnv             string             `yaml:"env" env-default:"local"` // Привязка к "env"
-	DatabaseConnection DatabaseConnection `yaml:"database"`                // Остаётся без изменений
-	HTTPConfig         HTTPServer         `yaml:"http_server"`             // Остаётся без изменений
+	AppEnv             string             `yaml:"env" env-default:"local"`
+	DatabaseConnection DatabaseConnection `yaml:"database"`
+	HTTPConfig         HTTPServer         `yaml:"http_server"` 
 	MigrationsPath     string             `yaml:"migrations_path" env-default:"../../migrations"`
 }
 

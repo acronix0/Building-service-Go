@@ -34,8 +34,7 @@ func NewApp(ctx context.Context) (*App, error) {
 
 // @title Building API
 // @version 1.0
-// @description API for managing songs and their texts.
-// @termsOfService http://example.com/terms/
+// @description API for managing buildings.
 
 // @license.name MIT
 // @license.url http://opensource.org/licenses/MIT
@@ -72,7 +71,7 @@ func (a *App) initDeps(ctx context.Context) error {
 		a.initConfig,
 		a.initLogger,
 		a.initServiceProvider,
-		a.InitMigrations,
+		//a.InitMigrations,
 	}
 
 	for _, f := range inits {

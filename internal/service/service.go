@@ -11,6 +11,6 @@ type ServiceManager interface {
 }
 
 type Building interface {
-	Create(ctx context.Context, building dto.BuildingDTO) error
+	Create(ctx context.Context, building dto.CreateBuildingDTO) error
 	Get(ctx context.Context, filters dto.FiltersBuildingDTO) ([]dto.BuildingDTO, error)
 }

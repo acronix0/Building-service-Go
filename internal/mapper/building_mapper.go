@@ -5,14 +5,7 @@ import (
 	"github.com/acronix0/Building-service-Go/internal/repository/building/model"
 )
 
-func MapDTOToModel(dto dto.BuildingDTO) model.Building {
-	return model.Building{
-		Name:   dto.Name,
-		City:   dto.City,
-		Year:   dto.Year,
-		Floors: dto.Floors,
-	}
-}
+
 
 func MapModelToDTO(building model.Building) dto.BuildingDTO {
 	return dto.BuildingDTO{
@@ -37,5 +30,14 @@ func MapFiltersModelToDTO(filters model.BuildingFilters) dto.FiltersBuildingDTO 
 		City:   filters.City,
 		Year:   filters.Year,
 		Floors: filters.Floors,
+	}
+}
+
+func MapCreateDTOToModel(dto dto.CreateBuildingDTO) model.Building {
+	return model.Building{
+		Name:   dto.Name,
+		City:   dto.City,
+		Year:   dto.Year,
+		Floors: dto.Floors,
 	}
 }

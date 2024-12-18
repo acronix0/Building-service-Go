@@ -1,0 +1,107 @@
+basePath: /api/v1
+definitions:
+  github_com_acronix0_Building-service-Go_internal_dto.BuildingDTO:
+    properties:
+      city:
+        type: string
+      floors:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      year:
+        type: integer
+    type: object
+  github_com_acronix0_Building-service-Go_internal_dto.CreateBuildingDTO:
+    properties:
+      city:
+        type: string
+      floors:
+        type: integer
+      name:
+        type: string
+      year:
+        type: integer
+    type: object
+  internal_delivery_http_v1.Response:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for managing buildings.
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+  title: Building API
+  version: "1.0"
+paths:
+  /building:
+    get:
+      description: Get a filtered list of buildings.
+      parameters:
+      - description: Filter by city
+        in: query
+        name: city
+        type: string
+      - description: Filter by year
+        in: query
+        name: year
+        type: integer
+      - description: Filter by number of floors
+        in: query
+        name: floors
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of buildings
+          schema:
+            items:
+              $ref: '#/definitions/github_com_acronix0_Building-service-Go_internal_dto.BuildingDTO'
+            type: array
+        "400":
+          description: Invalid query parameters
+          schema:
+            $ref: '#/definitions/internal_delivery_http_v1.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/internal_delivery_http_v1.Response'
+      summary: Get Buildings
+      tags:
+      - Buildings
+    post:
+      consumes:
+      - application/json
+      description: Add a new building to the database.
+      parameters:
+      - description: Building details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_acronix0_Building-service-Go_internal_dto.CreateBuildingDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created building
+          schema:
+            $ref: '#/definitions/github_com_acronix0_Building-service-Go_internal_dto.BuildingDTO'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/internal_delivery_http_v1.Response'
+        "500":
+          description: Failed to add building
+          schema:
+            $ref: '#/definitions/internal_delivery_http_v1.Response'
+      summary: Create Building
+      tags:
+      - Buildings
+swagger: "2.0"

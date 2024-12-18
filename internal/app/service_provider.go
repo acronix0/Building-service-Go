@@ -4,13 +4,11 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/acronix0/song-libary-api/internal/config"
-	"github.com/acronix0/song-libary-api/internal/database"
-	externalapi "github.com/acronix0/song-libary-api/internal/external_api"
-	songdetailapi "github.com/acronix0/song-libary-api/internal/external_api/song_detail_api"
-	"github.com/acronix0/song-libary-api/internal/repository"
-	"github.com/acronix0/song-libary-api/internal/service"
-	"github.com/acronix0/song-libary-api/internal/service/library"
+	"github.com/acronix0/Building-service-Go/internal/config"
+	"github.com/acronix0/Building-service-Go/internal/database"
+	"github.com/acronix0/Building-service-Go/internal/repository"
+	"github.com/acronix0/Building-service-Go/internal/service"
+	"github.com/acronix0/Building-service-Go/internal/service/building"
 )
 
 type serviceProvider struct {
@@ -26,24 +24,17 @@ func newServiceProvider(cfg *config.Config, logger *slog.Logger) *serviceProvide
 }
 
 func (s *serviceProvider) Config() *config.Config {
-	if s.config == nil {
-		config, err := config.Load()
-		if err != nil {
-			panic(err)
-		}
-		s.config = config
-	}
 	return s.config
 }
 func (s *serviceProvider) Database() *database.Database {
 	if s.dataBase == nil {
 		cfg := s.Config()
 		db, err := database.NewDatabase(
-			cfg.DatabaseConndection.Port,
-			cfg.DatabaseConndection.Host,
-			cfg.DatabaseConndection.User,
-			cfg.DatabaseConndection.Password,
-			cfg.DatabaseConndection.Name)
+			cfg.DatabaseConnection.Port,
+			cfg.DatabaseConnection.Host,
+			cfg.DatabaseConnection.User,
+			cfg.DatabaseConnection.Password,
+			cfg.DatabaseConnection.Name)
 		if err != nil {
 			panic(err)
 		}
@@ -60,7 +51,7 @@ func (s *serviceProvider) Logger() *slog.Logger {
 }
 func (s *serviceProvider) ServiceManager() service.ServiceManager {
 	if s.serviceManager == nil {
-		s.serviceManager = library.NewService(s.RepositoryManager())
+		s.serviceManager = building.NewService(s.RepositoryManager())
 
 	}
 

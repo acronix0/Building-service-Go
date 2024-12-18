@@ -2,10 +2,11 @@ package config
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 	"time"
 
-	"github.com/caarlos0/env/v6"
-	"github.com/joho/godotenv"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 const (
@@ -14,37 +15,47 @@ const (
 )
 
 type Config struct {
-	AppEnv              string             `env:"APP_ENV" envDefault:"local"`
-	DatabaseConndection DatabaseConnection `envPrefix:"DB_"`
-	HTTPConfig          HTTPServer         `envPrefix:"HTTP_"`
-	MigrationsPath      string             `env:"MIGRATIONS_PATH" envDefault:"../../migrations"`
-	ExternalAPIBaseURL  string             `env:"EXTERNAL_API_BASE_URL"`
+	AppEnv             string             `yaml:"env" env-default:"local"` // Привязка к "env"
+	DatabaseConnection DatabaseConnection `yaml:"database"`                // Остаётся без изменений
+	HTTPConfig         HTTPServer         `yaml:"http_server"`             // Остаётся без изменений
+	MigrationsPath     string             `yaml:"migrations_path" env-default:"../../migrations"`
 }
 
 type DatabaseConnection struct {
-	Host     string `env:"HOST" envDefault:"localhost"`
-	Port     int    `env:"PORT" envDefault:"5432"`
-	User     string `env:"USER" envDefault:"postgres"`
-	Password string `env:"PASSWORD" envDefault:"secret"`
-	Name     string `env:"NAME" envDefault:"songs"`
+	Host     string `yaml:"host" env-default:"localhost"`
+	Port     int    `yaml:"port" env-default:"5432"`
+	User     string `yaml:"user" env-default:"postgres"`
+	Password string `yaml:"password" env-default:"secret"`
+	Name     string `yaml:"db" env-default:"songs"`
 }
 
 type HTTPServer struct {
-	Host               string        `env:"HOST" envDefault:"0.0.0.0"`
-	Port               string        `env:"PORT" envDefault:"8080"`
-	ReadTimeout        time.Duration `env:"READ_TIMEOUT" envDefault:"5s"`
-	WriteTimeout       time.Duration `env:"WRITE_TIMEOUT" envDefault:"5s"`
-	MaxHeaderMegabytes int           `env:"MAX_HEADER_MEGABYTES" envDefault:"1"`
+	Host               string        `yaml:"host" env-default:"0.0.0.0"`
+	Port               string        `yaml:"port" env-default:"8080"`
+	ReadTimeout        time.Duration `yaml:"read_timeout" env-default:"5s"`
+	WriteTimeout       time.Duration `yaml:"write_timeout" env-default:"10s"`
+	MaxHeaderMegabytes int           `yaml:"max_header_megabytes" env-default:"1"`
 }
 
-func Load() (*Config, error) {
-	if err := godotenv.Load("../../.env"); err != nil {
-		log.Printf("Warning: No .env file found, using environment variables")
+func MustLoad() *Config {
+	exePath, err := os.Executable()
+	if err != nil {
+		log.Fatalf("Failed to get executable path: %v", err)
 	}
 
-	cfg := &Config{}
-	if err := env.Parse(cfg); err != nil {
-		return nil, err
+	exeDir := filepath.Dir(exePath)
+	configABSPath := filepath.Join(exeDir, "../../config/config.yaml")
+
+	if configABSPath == "" {
+		log.Fatal("CONFIG_PATH not set")
 	}
-	return cfg, nil
+	if _, err := os.Stat(configABSPath); os.IsNotExist(err) {
+		log.Fatalf("config file %s does not exist\n", configABSPath)
+	}
+	var cfg Config
+	if err := cleanenv.ReadConfig(configABSPath, &cfg); err != nil {
+		log.Fatalf("cannot read config %s", configABSPath)
+	}
+	cfg.MigrationsPath = filepath.Join(exeDir, cfg.MigrationsPath)
+	return &cfg
 }

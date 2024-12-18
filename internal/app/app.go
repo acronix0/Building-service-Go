@@ -10,10 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/acronix0/song-libary-api/internal/config"
-	"github.com/acronix0/song-libary-api/internal/database"
-	delivery "github.com/acronix0/song-libary-api/internal/delivery/http"
-	"github.com/acronix0/song-libary-api/internal/server"
+	"github.com/acronix0/Building-service-Go/internal/config"
+	"github.com/acronix0/Building-service-Go/internal/database"
+	delivery "github.com/acronix0/Building-service-Go/internal/delivery/http"
+	"github.com/acronix0/Building-service-Go/internal/server"
 )
 
 type App struct {
@@ -40,7 +40,7 @@ func NewApp(ctx context.Context) (*App, error) {
 // @license.name MIT
 // @license.url http://opensource.org/licenses/MIT
 
-// @host localhost:8082
+// @host localhost:8080
 // @BasePath /api/v1
 func (a *App) Run() {
 	handlers := delivery.NewHandler(a.serviceProvider.ServiceManager(), a.logger)
@@ -86,12 +86,7 @@ func (a *App) initDeps(ctx context.Context) error {
 }
 
 func (a *App) initConfig(_ context.Context) error {
-	cfg, err := config.Load()
-	if err != nil {
-		a.logger.Error(err.Error())
-	}
-
-	a.config = cfg
+	a.config = config.MustLoad()
 	return nil
 }
 
@@ -113,11 +108,11 @@ func (a *App) initLogger(_ context.Context) error {
 func (a *App) InitMigrations(_ context.Context) error {
 	return database.InitMigrations(
 		a.config.MigrationsPath,
-		a.config.DatabaseConndection.Host,
-		a.config.DatabaseConndection.User,
-		a.config.DatabaseConndection.Name,
-		a.config.DatabaseConndection.Password,
-		a.config.DatabaseConndection.Port,
+		a.config.DatabaseConnection.Host,
+		a.config.DatabaseConnection.User,
+		a.config.DatabaseConnection.Name,
+		a.config.DatabaseConnection.Password,
+		a.config.DatabaseConnection.Port,
 	)
 }
 func (a *App) initServiceProvider(_ context.Context) error {

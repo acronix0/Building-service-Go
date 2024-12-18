@@ -1,0 +1,17 @@
+env: "local"
+
+database:
+  host: "localhost"
+  port: 5432
+  db: "building"
+  user: "postgres"
+  password: "89872010riot!"
+
+http_server:
+  host: "localhost"
+  port: "8080"
+  read_timeout: "5s"
+  write_timeout: "10s"
+  max_header_megabytes: 10
+
+migrations_path: "../../migrations"

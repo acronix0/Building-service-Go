@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"log"
+
+	"github.com/acronix0/Building-service-Go/internal/app"
 )
 
 func main() {

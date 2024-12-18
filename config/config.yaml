@@ -5,7 +5,7 @@ database:
   port: 5432
   db: "building"
   user: "postgres"
-  password: "89872010riot!"
+  password: ""
 
 http_server:
   host: "localhost"
